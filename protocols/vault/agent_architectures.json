@@ -1,0 +1,61 @@
+[{
+  "source": "claude_code",
+  "learned_at": "2026-02-28T15:35:00",
+  "patterns": [
+    "Single agentic loop: think → tool_call → observe → repeat",
+    "Never summarize context — always read full files",
+    "Bash as primary tool, not Python subprocess wrappers",
+    "Re-read files after writing to verify success",
+    "Abandon bad approaches after 2 failures, try different strategy",
+    "Compact conversation when context window fills (not summarize — compress)"
+  ],
+  "key_insight": "The loop IS the intelligence. The model is just the brain inside it."
+},
+{
+  "source": "cursor_composer",
+  "learned_at": "2026-02-28T15:35:00",
+  "patterns": [
+    "Shadow workspace: ALL edits in memory first, diff before applying",
+    "Speculative multi-file edits: plan entire changeset before touching disk",
+    "Context chunking: large codebases split by semantic relevance",
+    "Tab completion trained on user's specific codebase patterns",
+    "Subagents: Cursor 2.0 spawns parallel sub-agents for independent tasks"
+  ],
+  "key_insight": "Never touch disk until the full plan is validated in memory."
+},
+{
+  "source": "devin_cognition",
+  "learned_at": "2026-02-28T15:35:00",
+  "patterns": [
+    "Planner + Executor + Verifier are SEPARATE model roles",
+    "Planner writes a scratchpad before any action",
+    "Verifier runs tests and reads full error messages to loop back",
+    "Long-horizon memory: intermediate results stored to files between steps",
+    "Browser + terminal + code editor: three separate tool channels"
+  ],
+  "key_insight": "Separate roles prevent the executor from rationalizing its own mistakes."
+},
+{
+  "source": "openai_codex_cli",
+  "learned_at": "2026-02-28T15:35:00",
+  "patterns": [
+    "Fully sandboxed: code runs in isolated network-off environment",
+    "Test-driven: write failing tests FIRST, then make them pass",
+    "Diff-only output: never rewrite whole files, just patches",
+    "Approval mode: show proposed changes to human before applying",
+    "Harness: standardized test runner wraps every task"
+  ],
+  "key_insight": "Sandbox + TDD + approval = safe autonomous coding at scale."
+},
+{
+  "source": "swe_bench_top_performers",
+  "learned_at": "2026-02-28T15:35:00",
+  "patterns": [
+    "Multi-model: planner=large model, executor=fast model, verifier=reasoner",
+    "Localization first: find EXACTLY where the bug is before touching anything",
+    "Reproduce before fix: write a failing test that proves the bug exists",
+    "Verify after fix: confirm test now passes before declaring done",
+    "76%+ SWE-bench accuracy achieved with this loop alone"
+  ],
+  "key_insight": "Reproduce → Localize → Fix → Verify. Never skip steps."
+}]
