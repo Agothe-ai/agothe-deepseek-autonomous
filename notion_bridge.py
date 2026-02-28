@@ -1,5 +1,4 @@
-﻿# notion_bridge.py — Agothe Notion API Bridge
-# Copy to: C:\Users\gtsgo\agothe_core\notion_bridge.py
+# notion_bridge.py — Agothe Notion API Bridge
 
 import os
 import json
@@ -22,12 +21,8 @@ class NotionBridge:
         if not self.token:
             raise ValueError("NOTION_API_TOKEN not set. Add to environment or pass directly.")
         self.client = Client(auth=self.token)
-        self.page_cache = {}  # Cache pages to reduce API calls
-        self.signature_registry = {}  # CRSS signatures loaded from Notion
-    
-    # ═══════════════════════════════════════
-    # READ OPERATIONS
-    # ═══════════════════════════════════════
+        self.page_cache = {}
+        self.signature_registry = {}
     
     def get_page(self, page_id: str) -> Dict:
         """Retrieve a page's properties by ID."""
@@ -78,18 +73,12 @@ class NotionBridge:
         )
         return response.get("results", [])
     
-    # ═══════════════════════════════════════
-    # WRITE OPERATIONS
-    # ═══════════════════════════════════════
-    
     def create_page(self, parent_id: str, title: str, 
                     content_blocks: Optional[List[Dict]] = None,
                     icon: Optional[str] = None,
                     properties: Optional[Dict] = None) -> Dict:
         """Create a new page under a parent page or database."""
         parent_id = self._clean_id(parent_id)
-        
-        # Detect if parent is database or page
         parent_obj = self._detect_parent_type(parent_id)
         
         page_data = {
@@ -101,7 +90,7 @@ class NotionBridge:
             page_data["icon"] = {"type": "emoji", "emoji": icon}
         
         if content_blocks:
-            page_data["children"] = content_blocks[:100]  # API limit
+            page_data["children"] = content_blocks[:100]
         
         return self.client.pages.create(**page_data)
     
@@ -120,10 +109,6 @@ class NotionBridge:
             page_id=page_id,
             properties=properties
         )
-    
-    # ═══════════════════════════════════════
-    # DATABASE OPERATIONS
-    # ═══════════════════════════════════════
     
     def query_database(self, database_id: str, 
                        filter_obj: Optional[Dict] = None,
@@ -155,10 +140,6 @@ class NotionBridge:
         database_id = self._clean_id(database_id)
         db = self.client.databases.retrieve(database_id=database_id)
         return db.get("properties", {})
-    
-    # ═══════════════════════════════════════
-    # BLOCK BUILDERS (helper methods)
-    # ═══════════════════════════════════════
     
     @staticmethod
     def text_block(content: str, block_type: str = "paragraph") -> Dict:
@@ -211,27 +192,19 @@ class NotionBridge:
     def divider_block() -> Dict:
         return {"object": "block", "type": "divider", "divider": {}}
     
-    # ═══════════════════════════════════════
-    # INTERNAL HELPERS
-    # ═══════════════════════════════════════
-    
     def _clean_id(self, id_or_url: str) -> str:
         """Extract clean 32-char ID from URL or formatted ID."""
-        # Handle full Notion URLs
         if "notion.so" in id_or_url or "notion.site" in id_or_url:
-            # Extract the ID from the end of the URL
             parts = id_or_url.rstrip("/").split("-")
             if parts:
                 candidate = parts[-1].replace("/", "")
                 if len(candidate) == 32:
                     return candidate
-        # Handle hyphenated UUIDs
         clean = id_or_url.replace("-", "")
-        # Take last 32 hex chars
         hex_chars = re.sub(r"[^0-9a-fA-F]", "", clean)
         if len(hex_chars) >= 32:
             return hex_chars[-32:]
-        return id_or_url  # Return as-is, let API handle errors
+        return id_or_url
     
     def _detect_parent_type(self, parent_id: str) -> Dict:
         """Detect if parent is a page or database."""
@@ -274,7 +247,6 @@ class NotionBridge:
             elif text:
                 lines.append(f"{prefix}{text}")
             
-            # Recurse into children
             if block.get("has_children"):
                 child_blocks = self.get_page_content(block["id"])
                 lines.append(self._blocks_to_text(child_blocks, depth + 1))

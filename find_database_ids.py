@@ -1,8 +1,7 @@
-﻿# find_database_ids.py — Run once to find your Panel brain database IDs
+# find_database_ids.py — Find Panel brain database IDs
 from notion_bridge import NotionBridge
 
 bridge = NotionBridge()
-
 db_names = [
     "9 — Evolution Log",
     "CN-1 — Reflexivity Log", 
@@ -11,6 +10,7 @@ db_names = [
     "Vira — Anomaly Log"
 ]
 
+print("🔍 Searching for Panel brain databases...\n")
 for name in db_names:
     results = bridge.search_pages(name)
     for r in results:
@@ -18,7 +18,6 @@ for name in db_names:
             print(f"{name}: {r['id']}")
             break
     else:
-        # Try page search as fallback
         for r in results:
             print(f"{name} (page): {r['id']}")
             break
