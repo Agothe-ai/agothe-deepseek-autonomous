@@ -1,0 +1,39 @@
+# JARVIS v8.0 — Full Dependency Stack
+# Install with: pip install -r requirements.txt
+# Or just run: install_jarvis.bat (recommended for Windows)
+
+# === CORE AI ===
+openai>=1.12.0
+fastapi>=0.109.0
+uvicorn>=0.27.0
+python-multipart>=0.0.9
+
+# === SEMANTIC MEMORY ===
+# Downloads all-MiniLM-L6-v2 (~90MB) on first use — local, free, private
+sentence-transformers>=2.6.0
+
+# === VOICE ===
+pyttsx3>=2.90
+openai-whisper>=20231117
+numpy>=1.24.0
+# pyaudio — install separately if pip fails:
+#   Windows: pip install pyaudio
+#   If that fails: pip install pipwin && pipwin install pyaudio
+
+# === WEB INTELLIGENCE (Phase 9) ===
+playwright>=1.40.0
+duckduckgo-search>=4.1.0
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+
+# === TASK SCHEDULING ===
+apscheduler>=3.10.0
+
+# === TESTING ===
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# === OPTIONAL: GPU-accelerated memory ===
+# Uncomment if you have a GPU:
+# torch>=2.0.0
+# sentence-transformers[onnx]
